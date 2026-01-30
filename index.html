@@ -303,8 +303,8 @@
                         <span class="vid-title">~/user/dev/showreel.mp4</span>
                     </div>
                     <div class="video-wrapper">
-                        <video id="myVideo" width="640" height="360" controls autoplay>
-                            <source src="assets/Portfolio Video 1.mp4" type="video/mp4">
+                        <video id="myVideo" width="640" height="360" controls autoplay muted playsinline>
+                            <source src="assets/Portfolio%20Video%201.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -384,7 +384,7 @@
                 <h2 style="font-family:var(--font-head); font-size: 3rem; margin-bottom:1rem;">Let's Connect</h2>
                 <p style="color:var(--text-muted); font-size:1.1rem;">Open for freelance work and collaborations.</p>
                 <div class="contact-grid">
-                    <a href="mailto:your@email.com" class="contact-card hover-target"><div class="contact-icon">📧</div><div class="contact-label">Email</div></a>
+                    <a href="mailto:karnam7239@mydusd.org" class="contact-card hover-target"><div class="contact-icon">📧</div><div class="contact-label">Email</div></a>
                     <a href="https://discord.com" target="_blank" class="contact-card hover-target"><div class="contact-icon">💬</div><div class="contact-label">Discord</div></a>
                     <a href="https://github.com" target="_blank" class="contact-card hover-target"><div class="contact-icon">👾</div><div class="contact-label">GitHub</div></a>
                 </div>
@@ -565,68 +565,44 @@
                 container.innerHTML = `<h3 style="margin-bottom: 1.5rem; font-family: var(--font-head);">Project Gallery</h3><div class="detail-gallery" id="d-gallery"></div>`;
                 const newGallery = document.getElementById('d-gallery');
                 
-                if (p.images && p.images.length > 0) {
-                    p.images.forEach(imgSrc => {
-                        const img = document.createElement('img'); img.src = imgSrc; img.className = 'gallery-img'; newGallery.appendChild(img);
-                    });
-                } else { 
-                    newGallery.innerHTML = '<p style="color:var(--text-muted)">No preview images available.</p>'; 
+                if (p.images.length > 0) {
+                   p.images.forEach(img => {
+                       newGallery.innerHTML += `<img src="${img}" class="gallery-img">`;
+                   });
+                } else {
+                   newGallery.innerHTML = `<p style="color:var(--text-muted);">No images available yet.</p>`;
                 }
             }
             
             nav('project-detail');
         }
 
-        // --- 6. TYPEWRITER EFFECT ---
-        const textElement = document.getElementById('typewriter');
-        const phrases = ["Logic", "Experience", "Solutions", "The Future"];
-        let phraseIndex = 0; let charIndex = 0; let isDeleting = false;
-
-        function type() {
-            const current = phrases[phraseIndex];
-            if (isDeleting) {
-                textElement.innerText = current.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                textElement.innerText = current.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === current.length) {
-                isDeleting = true; setTimeout(type, 2000);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; setTimeout(type, 500);
-            } else {
-                setTimeout(type, isDeleting ? 100 : 200);
-            }
-        }
-        type();
-    </script>
-
-    <script>
+        // --- 6. FIXED VIDEO PLAYLIST LOGIC ---
+        // This ensures the next video plays automatically
         const videoPlayer = document.getElementById('myVideo');
         
-        // List your video files here in order
+        // IMPORTANT: Add your other video filenames here!
         const playlist = [
-            "assets/Portfolio Video 1.mp4",
-            "assets/Portfolio Video 2.mp4"
+            "assets/Portfolio%20Video%201.mp4",
+            // "assets/Portfolio%20Video%202.mp4", 
+            // "assets/Portfolio%20Video%203.mp4" 
         ];
         
         let currentVideoIndex = 0;
 
-        // This "event listener" waits for the 'ended' signal
         videoPlayer.onended = function() {
-            currentVideoIndex++; // Move to the next index
-            
+            currentVideoIndex++;
             if (currentVideoIndex < playlist.length) {
-            // Change the source to the next video
-            videoPlayer.src = playlist[currentVideoIndex];
-            videoPlayer.play();
+                videoPlayer.src = playlist[currentVideoIndex];
+                videoPlayer.play();
             } else {
-            console.log("Playlist finished.");
-            // Optional: Reset to 0 and play again to loop the whole playlist
+                // Optional: Restart from beginning
+                currentVideoIndex = 0;
+                videoPlayer.src = playlist[0];
+                videoPlayer.play();
             }
         };
+
     </script>
 </body>
 </html>
