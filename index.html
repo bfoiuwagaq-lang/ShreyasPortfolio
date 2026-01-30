@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Interactive</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* --- 1. CONFIGURATION --- */
         :root {
@@ -23,6 +23,22 @@
             --cursor-size: 20px;
         }
 
+        /* --- SECRET HACKER MODE VARIABLES --- */
+        body.hacker-mode {
+            --bg: #000000;
+            --surface: #0a1f0a;
+            --surface-hover: #0f2f0f;
+            --surface-border: #00ff00;
+            --primary: #00ff00;
+            --secondary: #008f00;
+            --accent: #00ff00;
+            --repair: #00ff00;
+            --text-main: #00ff00;
+            --text-muted: #00aa00;
+            --font-head: 'JetBrains Mono', monospace;
+            --font-body: 'JetBrains Mono', monospace;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
@@ -35,6 +51,7 @@
             overflow: hidden; 
             display: flex;
             flex-direction: column;
+            transition: background-color 0.5s, color 0.5s; /* Smooth transition for secret mode */
         }
 
         /* --- 2. MAGIC CURSOR & BACKGROUND --- */
@@ -43,18 +60,23 @@
             pointer-events: none; z-index: 0;
             background: radial-gradient(600px circle at var(--x) var(--y), rgba(168, 85, 247, 0.07), transparent 40%);
         }
+        /* Update spotlight for hacker mode */
+        body.hacker-mode .mouse-spotlight {
+             background: radial-gradient(600px circle at var(--x) var(--y), rgba(0, 255, 0, 0.1), transparent 40%);
+        }
 
         .cursor-dot, .cursor-outline {
             position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
             border-radius: 50%; z-index: 9999; pointer-events: none;
         }
 
-        .cursor-dot { width: 8px; height: 8px; background-color: white; }
+        .cursor-dot { width: 8px; height: 8px; background-color: var(--text-main); }
         .cursor-outline {
             width: var(--cursor-size); height: var(--cursor-size);
             border: 1px solid rgba(255, 255, 255, 0.5);
             transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
+        body.hacker-mode .cursor-outline { border-color: #00ff00; }
 
         body.hovering .cursor-outline {
             width: 50px; height: 50px; background-color: rgba(255, 255, 255, 0.1);
@@ -97,6 +119,7 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        body.hacker-mode ::-webkit-scrollbar-thumb { background: #005500; }
 
         /* --- 5. PROJECT CARDS --- */
         .projects-grid {
@@ -109,6 +132,7 @@
             display: flex; flex-direction: column; justify-content: space-between; height: 100%;
         }
         .project-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-5px); background: var(--surface-hover); }
+        body.hacker-mode .project-card:hover { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
 
         .card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.2rem; }
         .card-title { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; line-height: 1.2; }
@@ -129,37 +153,56 @@
         .progress-bar-bg { background: rgba(255,255,255,0.1); width: 100%; height: 6px; border-radius: 10px; overflow: hidden; margin-top: 1.2rem;}
         .progress-fill { height: 100%; border-radius: 10px; }
 
-        /* --- 6. HOME STYLES --- */
-        .home-container { min-height: 75vh; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1400px; margin: 0 auto; position: relative; }
+        /* --- 6. HOME STYLES (UPDATED FOR VIDEO) --- */
+        .home-container { min-height: 75vh; display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center; max-width: 1400px; margin: 0 auto; position: relative; }
         .hero-content h1 { font-family: var(--font-head); font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; }
         .gradient-text { background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.hacker-mode .gradient-text { background: none; -webkit-text-fill-color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        
         .hero-content p { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem; max-width: 500px; }
         
         .hero-stats { display: flex; gap: 3rem; margin-bottom: 2.5rem; }
         .stat-item h3 { font-family: var(--font-head); font-size: 2rem; color: var(--text-main); margin-bottom: 0; }
         .stat-item p { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Neural Net Canvas Container */
-        .canvas-container { 
+        /* --- VIDEO TERMINAL STYLES --- */
+        .video-container { 
             width: 100%; height: 400px; 
-            border-radius: 20px; 
+            border-radius: 12px; 
             overflow: hidden; 
             border: 1px solid var(--surface-border); 
             box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5); 
             background: #000;
             position: relative;
         }
-        .canvas-ui {
-            position: absolute; top: 15px; left: 15px; font-family: var(--font-body); 
-            font-size: 0.7rem; color: var(--primary); padding: 5px 10px; 
-            background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 4px;
-            pointer-events: none;
+        
+        /* Terminal Header Look */
+        .video-header {
+            height: 30px; background: rgba(20,20,20,0.9);
+            border-bottom: 1px solid var(--surface-border);
+            display: flex; align-items: center; padding: 0 15px;
+            gap: 8px;
         }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ff5f57; } .yellow { background: #febc2e; } .green { background: #28c840; }
+        .vid-title { font-family: monospace; font-size: 12px; color: #555; margin-left: 10px; }
 
+        .video-wrapper { position: relative; width: 100%; height: calc(100% - 30px); }
+        .video-wrapper iframe { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
+        .video-container:hover iframe { opacity: 1; }
+        
+        /* Scanline Overlay */
+        .scanlines {
+            position: absolute; inset: 0; pointer-events: none; z-index: 5;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+        }
+        
         /* Marquee Animation */
         .marquee-wrapper { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--surface); border-top: 1px solid var(--surface-border); overflow: hidden; white-space: nowrap; padding: 1.5rem 0; }
         .marquee-content { display: inline-block; animation: scroll 30s linear infinite; }
         .marquee-item { display: inline-block; margin: 0 2rem; font-family: var(--font-head); font-weight: 700; color: rgba(255,255,255,0.3); font-size: 1.2rem; }
+        body.hacker-mode .marquee-item { color: rgba(0,255,0,0.3); }
         @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         /* --- 7. ABOUT & SKILLS --- */
@@ -216,7 +259,7 @@
             .home-container { grid-template-columns: 1fr; } 
             .about-grid { grid-template-columns: 1fr; } 
             .hero-stats { justify-content: flex-start; }
-            .canvas-container { height: 300px; }
+            .video-container { height: 250px; }
         }
     </style>
 </head>
@@ -254,9 +297,17 @@
                     <a href="#" onclick="nav('projects')" class="github-btn-large hover-target" style="background: white; color: black;">View My Projects</a>
                 </div>
                 
-                <div class="canvas-container hover-target">
-                    <div class="canvas-ui">SYS.MONITOR // NEURAL_NET</div>
-                    <canvas id="neural-canvas"></canvas>
+                <div class="video-container hover-target">
+                    <div class="video-header">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="vid-title">~/user/dev/showreel.mp4</span>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/LXb3EKWsInQ?autoplay=1&mute=1&controls=0&loop=1&playlist=LXb3EKWsInQ" 
+                            title="Showreel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="scanlines"></div>
                 </div>
             </div>
 
@@ -362,77 +413,32 @@
             } else { document.body.classList.remove('hovering'); }
         });
 
-        // --- 2. NEURAL NETWORK CANVAS ANIMATION ---
-        const canvas = document.getElementById('neural-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, particles = [];
+        // --- 2. THE SECRET THING (KONAMI CODE) ---
+        // Code: Up, Up, Down, Down, Left, Right, Left, Right, B, A
+        const secretCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let currentInput = [];
 
-        function resizeCanvas() {
-            width = canvas.width = canvas.parentElement.offsetWidth;
-            height = canvas.height = canvas.parentElement.offsetHeight;
-            initParticles();
-        }
+        window.addEventListener('keydown', (e) => {
+            currentInput.push(e.key);
+            currentInput.splice(-secretCode.length - 1, currentInput.length - secretCode.length);
+            
+            if (currentInput.join('').toLowerCase() === secretCode.join('').toLowerCase()) {
+                activateSecretMode();
+            }
+        });
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 1;
-                this.vy = (Math.random() - 0.5) * 1;
-                this.size = Math.random() * 2 + 1;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-                
-                // Interaction with mouse (Need to adjust relative to canvas position)
-                const rect = canvas.getBoundingClientRect();
-                const relX = mouseX - rect.left;
-                const relY = mouseY - rect.top;
-                
-                let dx = relX - this.x; let dy = relY - this.y;
-                let distance = Math.sqrt(dx*dx + dy*dy);
-                if (distance < 100) {
-                    this.x -= dx * 0.03;
-                    this.y -= dy * 0.03;
-                }
-            }
-            draw() {
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#a855f7'; ctx.fill(); // Purple
+        function activateSecretMode() {
+            document.body.classList.toggle('hacker-mode');
+            const status = document.body.classList.contains('hacker-mode') ? "ACTIVATED" : "DEACTIVATED";
+            console.log(`%c HACKER MODE ${status} `, 'background: #00ff00; color: #000; font-size: 20px;');
+            
+            // Optional: Alert the user
+            if(document.body.classList.contains('hacker-mode')) {
+                alert("SYSTEM BREACH DETECTED. WELCOME TO THE MATRIX.");
             }
         }
 
-        function initParticles() {
-            particles = [];
-            // Density based on size
-            for (let i = 0; i < (width * height) / 8000; i++) particles.push(new Particle());
-        }
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, width, height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update(); particles[i].draw();
-                for (let j = i; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let d = Math.sqrt(dx*dx + dy*dy);
-                    if (d < 80) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(168, 85, 247, ${1 - d/80})`;
-                        ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateCanvas);
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        // Delay init slightly to ensure container is sized
-        setTimeout(() => { resizeCanvas(); animateCanvas(); }, 100);
-
-
-        // --- 3. PROJECTS DATA (Updated with Game Logic) ---
+        // --- 3. PROJECTS DATA ---
         const projects = [
             {
                 title: "Tectonic (Playable)",
@@ -440,7 +446,6 @@
                 status: "Live",
                 tags: ["Python", "Flask", "API"],
                 progress: 100,
-                // TYPE GAME = IFRAME EMBED
                 type: "game",
                 gameUrl: "http://127.0.0.1:5000", 
                 github: "https://github.com/yourusername/tectonic",
@@ -454,7 +459,7 @@
                 progress: 30,
                 type: "image",
                 github: "https://github.com/yourusername/minecraft-clone",
-                images: ["images/minecraft1.png", "images/minecraft2.png"]
+                images: ["https://via.placeholder.com/600x400/111/fff?text=Minecraft+Clone"]
             },
             {
                 title: "Photo Editor Pro",
@@ -464,7 +469,7 @@
                 progress: 90,
                 type: "image",
                 github: "https://github.com/yourusername/photo-editor",
-                images: ["images/editor.png"]
+                images: ["https://via.placeholder.com/600x400/111/fff?text=App+Screenshot"]
             },
             {
                 title: "Bitcoin Mining Sim",
@@ -586,12 +591,15 @@
                 charIndex++;
             }
 
-            let typeSpeed = isDeleting ? 50 : 150;
-            if (!isDeleting && charIndex === current.length) { isDeleting = true; typeSpeed = 2000; }
-            else if (isDeleting && charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; typeSpeed = 500; }
-            setTimeout(type, typeSpeed);
+            if (!isDeleting && charIndex === current.length) {
+                isDeleting = true; setTimeout(type, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting ? 100 : 200);
+            }
         }
-        document.addEventListener('DOMContentLoaded', type);
+        type();
     </script>
 </body>
 </html>
