@@ -16,6 +16,7 @@
             --secondary: #3b82f6;
             --accent: #f43f5e;
             --repair: #f59e0b;
+            --finished: #00b138;
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             --font-head: 'Space Grotesk', sans-serif;
@@ -51,7 +52,7 @@
             overflow: hidden; 
             display: flex;
             flex-direction: column;
-            transition: background-color 0.5s, color 0.5s; /* Smooth transition for secret mode */
+            transition: background-color 0.5s, color 0.5s;
         }
 
         /* --- 2. MAGIC CURSOR & BACKGROUND --- */
@@ -60,7 +61,6 @@
             pointer-events: none; z-index: 0;
             background: radial-gradient(600px circle at var(--x) var(--y), rgba(168, 85, 247, 0.07), transparent 40%);
         }
-        /* Update spotlight for hacker mode */
         body.hacker-mode .mouse-spotlight {
              background: radial-gradient(600px circle at var(--x) var(--y), rgba(0, 255, 0, 0.1), transparent 40%);
         }
@@ -141,9 +141,9 @@
         .tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: auto; }
         .tag { font-size: 0.75rem; padding: 6px 12px; border-radius: 20px; background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.05); }
 
-        /* Status Animations */
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
         @keyframes pulse-amber { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+        @keyframes blink { 50% { opacity: 0; } }
 
         .status-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 5px 10px; border-radius: 6px; white-space: nowrap; }
         .status-dev { color: var(--accent); background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); animation: pulse-red 2s infinite; }
@@ -153,9 +153,11 @@
         .progress-bar-bg { background: rgba(255,255,255,0.1); width: 100%; height: 6px; border-radius: 10px; overflow: hidden; margin-top: 1.2rem;}
         .progress-fill { height: 100%; border-radius: 10px; }
 
-        /* --- 6. HOME STYLES (UPDATED FOR VIDEO) --- */
+        /* --- 6. HOME STYLES --- */
         .home-container { min-height: 75vh; display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center; max-width: 1400px; margin: 0 auto; position: relative; }
-        .hero-content h1 { font-family: var(--font-head); font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        
+        /* Fixed typographic layout jump caused by line changes */
+        .hero-content h1 { font-family: var(--font-head); font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; min-height: 8.8rem; }
         .gradient-text { background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.hacker-mode .gradient-text { background: none; -webkit-text-fill-color: #00ff00; text-shadow: 0 0 10px #00ff00; }
         
@@ -176,7 +178,6 @@
             position: relative;
         }
         
-        /* Terminal Header Look */
         .video-header {
             height: 30px; background: rgba(20,20,20,0.9);
             border-bottom: 1px solid var(--surface-border);
@@ -188,17 +189,15 @@
         .vid-title { font-family: monospace; font-size: 12px; color: #555; margin-left: 10px; }
 
         .video-wrapper { position: relative; width: 100%; height: calc(100% - 30px); }
-        .video-wrapper iframe { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
-        .video-container:hover iframe { opacity: 1; }
+        .video-wrapper video { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
+        .video-container:hover video { opacity: 1; }
         
-        /* Scanline Overlay */
         .scanlines {
             position: absolute; inset: 0; pointer-events: none; z-index: 5;
             background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
             background-size: 100% 4px;
         }
         
-        /* Marquee Animation */
         .marquee-wrapper { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--surface); border-top: 1px solid var(--surface-border); overflow: hidden; white-space: nowrap; padding: 1.5rem 0; }
         .marquee-content { display: inline-block; animation: scroll 30s linear infinite; }
         .marquee-item { display: inline-block; margin: 0 2rem; font-family: var(--font-head); font-weight: 700; color: rgba(255,255,255,0.3); font-size: 1.2rem; }
@@ -234,7 +233,6 @@
         .detail-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3.5rem; }
         .gallery-img { width: 100%; height: 250px; object-fit: cover; border-radius: 12px; border: 1px solid var(--surface-border); background: #111; transition: 0.3s; }
         
-        /* Game Window Styles */
         .game-window-frame {
             width: 100%; height: 600px; border: none; border-radius: 12px;
             box-shadow: 0 0 30px rgba(168,85,247,0.2);
@@ -294,7 +292,7 @@
                         <div class="stat-item"><h3>∞</h3><p>Coffees</p></div>
                     </div>
 
-                    <a href="#" onclick="nav('projects')" class="github-btn-large hover-target" style="background: white; color: black;">View My Projects</a>
+                    <a href="#" onclick="nav('projects'); return false;" class="github-btn-large hover-target" style="background: white; color: black;">View My Projects</a>
                 </div>
                 
                 <div class="video-container hover-target">
@@ -303,7 +301,7 @@
                         <span class="vid-title">~/user/dev/showreel.mp4</span>
                     </div>
                     <div class="video-wrapper">
-                        <video id="myVideo" width="640" height="360" controls autoplay muted playsinline>
+                        <video id="myVideo" width="640" height="360" controls autoplay muted playsinline loop>
                             <source src="assets/Portfolio%20Video%201.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -356,13 +354,13 @@
                         <div class="skill-group">
                             <div class="skill-title">Daily Drivers</div>
                             <div class="skill-list">
-                                <div class="skill-pill hover-target">HTML5</div><div class="skill-pill hover-target">JavaScript</div><div class="skill-pill hover-target">TypeScript</div><div class="skill-pill hover-target">CSS/Tailwind</div>
+                                <div class="skill-pill hover-target">HTML5</div><div class="skill-pill hover-target">JavaScript</div><div class="skill-pill hover-target">TypeScript</div>
                             </div>
                         </div>
                         <div class="skill-group">
                             <div class="skill-title">Mobile & Systems</div>
                             <div class="skill-list">
-                                <div class="skill-pill hover-target">Swift</div><div class="skill-pill hover-target">Kotlin</div><div class="skill-pill hover-target">Python</div><div class="skill-pill hover-target">C++</div>
+                                <div class="skill-pill hover-target">Swift</div><div class="skill-pill hover-target">Kotlin</div><div class="skill-pill hover-target">Python</div>
                             </div>
                         </div>
                     </div>
@@ -398,7 +396,6 @@
         const cursorOutline = document.querySelector('[data-cursor-outline]');
         const spotlight = document.querySelector('.mouse-spotlight');
 
-        // Global mouse tracking
         let mouseX = 0; let mouseY = 0;
 
         window.addEventListener('mousemove', function(e) {
@@ -415,7 +412,6 @@
         });
 
         // --- 2. THE SECRET THING (KONAMI CODE) ---
-        // Code: Up, Up, Down, Down, Left, Right, Left, Right, B, A
         const secretCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
         let currentInput = [];
 
@@ -433,13 +429,48 @@
             const status = document.body.classList.contains('hacker-mode') ? "ACTIVATED" : "DEACTIVATED";
             console.log(`%c HACKER MODE ${status} `, 'background: #00ff00; color: #000; font-size: 20px;');
             
-            // Optional: Alert the user
             if(document.body.classList.contains('hacker-mode')) {
                 alert("SYSTEM BREACH DETECTED. WELCOME TO THE MATRIX.");
             }
         }
 
-        // --- 3. PROJECTS DATA ---
+        // --- 3. NEW TYPEWRITER LOGIC ---
+        const typewriterWords = ["Voxel Engines.", "Mobile Architecture.", "Web Ecosystems.", "Creative Code."];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typewriterElement = document.getElementById("typewriter");
+
+        function handleTypewriter() {
+            const currentWord = typewriterWords[wordIndex];
+            
+            if (isDeleting) {
+                typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typewriterElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                typeSpeed = 2000; 
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % typewriterWords.length;
+                typeSpeed = 400; 
+            }
+
+            setTimeout(handleTypewriter, typeSpeed);
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(handleTypewriter, 500);
+        });
+
+        // --- 4. PROJECTS DATA ---
         const projects = [
             {
                 title: "Tectonic (Playable)",
@@ -448,7 +479,6 @@
                 tags: ["Python", "Flask", "API"],
                 progress: 100,
                 type: "game",
-                gameUrl: "http://127.0.0.1:5000", 
                 github: "https://github.com/yourusername/tectonic",
                 images: []
             },
@@ -460,7 +490,7 @@
                 progress: 30,
                 type: "image",
                 github: "https://github.com/yourusername/minecraft-clone",
-                images: ["assets/"]
+                images: ["https://images.unsplash.com/photo-1627856013091-fed6e4e30025?w=600&auto=format&fit=crop&q=60"]
             },
             {
                 title: "Photo Editor Pro",
@@ -470,7 +500,7 @@
                 progress: 90,
                 type: "image",
                 github: "https://github.com/yourusername/photo-editor",
-                images: ["https://via.placeholder.com/600x400/111/fff?text=App+Screenshot"]
+                images: ["https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=60"]
             },
             {
                 title: "Bitcoin Mining Sim",
@@ -501,10 +531,20 @@
                 type: "image",
                 github: "#",
                 images: []
+            },
+            {
+                title: "Menu Ordering System",
+                desc: "A simple menu ordering system designed to be scalable.",
+                status: "Live",
+                tags: ["Python", "OOP"],
+                progress: 100,
+                type: "image",
+                github: "#",
+                images: []
             }
         ];
 
-        // --- 4. RENDER GRID ---
+        // --- 5. RENDER GRID ---
         const grid = document.getElementById('grid');
         projects.forEach((p, index) => {
             let badgeClass = 'status-live';
@@ -513,22 +553,23 @@
 
             const tagsHtml = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
             let progressHtml = '';
+            
             if (p.progress) {
-                const barColor = p.status === 'In Development' ? 'var(--accent)' : 'var(--repair)';
+                const barColor = p.status === 'In Development' ? 'var(--accent)' : (p.status === 'Under Repairs' ? 'var(--repair)' : 'var(--finished)');
                 progressHtml = `<div style="margin-top:10px;"><div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:5px; font-weight:600;"><span>Progress</span><span>${p.progress}%</span></div><div class="progress-bar-bg"><div class="progress-fill" style="width: ${p.progress}%; background: ${barColor};"></div></div></div>`;
             }
 
             grid.innerHTML += `<div class="project-card" onclick="openProject(${index})"><div><div class="card-header"><div class="card-title">${p.title}</div><div class="status-badge ${badgeClass}">${p.status}</div></div><div class="card-desc">${p.desc}</div>${progressHtml}</div><div class="tags">${tagsHtml}</div></div>`;
         });
 
-        // --- 5. NAVIGATION & DETAIL LOGIC ---
+        // --- 6. NAVIGATION & DETAIL LOGIC ---
         function nav(pageId) {
             document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
             const btn = document.getElementById('btn-' + pageId);
             if(btn) btn.classList.add('active');
-            if(pageId === 'projects') window.scrollTo(0, 0);
+            if(pageId === 'projects' || pageId === 'project-detail') window.scrollTo(0, 0);
         }
 
         function openProject(index) {
@@ -536,75 +577,47 @@
             document.getElementById('d-title').innerText = p.title;
             document.getElementById('d-desc').innerText = p.desc;
             
-            let badgeClass = 'status-live';
-            if (p.status === 'In Development') badgeClass = 'status-dev';
-            if (p.status === 'Under Repairs') badgeClass = 'status-repair';
+            // Set Badge Status Dynamically
             const statusEl = document.getElementById('d-status');
-            statusEl.innerText = p.status; statusEl.className = `status-badge ${badgeClass}`;
-            
-            document.getElementById('d-tags').innerText = p.tags.join(', ');
-            document.getElementById('d-link').href = p.github || "#";
-            
-            const gallery = document.getElementById('d-gallery');
-            const container = document.getElementById('d-gallery-container');
-            
-            // CHECK IF GAME OR IMAGES
-            if (p.type === 'game') {
-                container.innerHTML = `
-                    <div style="margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
-                        <h3 style="font-family: var(--font-head);">Playable Demo</h3>
-                        <a href="${p.gameUrl}" target="_blank" style="color:var(--primary); font-size:0.9rem;">Open in New Tab ↗</a>
-                    </div>
-                    <div class="game-fallback">
-                        <iframe src="${p.gameUrl}" class="game-window-frame"></iframe>
-                        <p style="margin-top:10px; font-size:0.8rem;">Ensure Flask is running at ${p.gameUrl}</p>
-                    </div>
-                `;
+            statusEl.innerText = p.status;
+            statusEl.className = 'status-badge'; // Reset classes
+            if (p.status === 'In Development') {
+                statusEl.classList.add('status-dev');
+            } else if (p.status === 'Under Repairs') {
+                statusEl.classList.add('status-repair');
             } else {
-                // Reset to Gallery Mode
-                container.innerHTML = `<h3 style="margin-bottom: 1.5rem; font-family: var(--font-head);">Project Gallery</h3><div class="detail-gallery" id="d-gallery"></div>`;
-                const newGallery = document.getElementById('d-gallery');
-                
-                if (p.images.length > 0) {
-                   p.images.forEach(img => {
-                       newGallery.innerHTML += `<img src="${img}" class="gallery-img">`;
-                   });
-                } else {
-                   newGallery.innerHTML = `<p style="color:var(--text-muted);">No images available yet.</p>`;
-                }
+                statusEl.classList.add('status-live');
             }
+
+            // Set Tech Stack Text
+            document.getElementById('d-tags').innerText = p.tags.join(', ');
+
+            // Setup Photo Gallery
+            const galleryContainer = document.getElementById('d-gallery-container');
+            const galleryEl = document.getElementById('d-gallery');
+            galleryEl.innerHTML = ''; // Clear previous images
             
+            if (p.images && p.images.length > 0) {
+                galleryContainer.style.display = 'block';
+                p.images.forEach(imgUrl => {
+                    galleryEl.innerHTML += `<img src="${imgUrl}" class="gallery-img" alt="${p.title} screenshot">`;
+                });
+            } else {
+                galleryContainer.style.display = 'none';
+            }
+
+            // Setup Github Link Visibility
+            const linkEl = document.getElementById('d-link');
+            if (p.github && p.github !== '#') {
+                linkEl.href = p.github;
+                linkEl.style.display = 'inline-block';
+            } else {
+                linkEl.style.display = 'none';
+            }
+
+            // Trigger Transition to View Screen
             nav('project-detail');
         }
-
-        // --- 6. FIXED VIDEO PLAYLIST LOGIC ---
-        // This ensures the next video plays automatically
-        const videoPlayer = document.getElementById('myVideo');
-        
-        // IMPORTANT: Add your other video filenames here!
-        const playlist = [
-            "assets/Portfolio Video 1.mp4",
-            "assets/Portfolio Video 2.mp4"
-            // "assets/Portfolio%20Video%202.mp4", 
-            // "assets/Portfolio%20Video%203.mp4" 
-        ];
-        
-        let currentVideoIndex = 0;
-
-        videoPlayer.onended = function() {
-            currentVideoIndex++;
-            if (currentVideoIndex < playlist.length) {
-                videoPlayer.src = playlist[currentVideoIndex];
-                videoPlayer.play();
-            } else {
-                // Optional: Restart from beginning
-                currentVideoIndex = 0;
-                videoPlayer.src = playlist[0];
-                videoPlayer.play();
-            }
-        };
-
     </script>
 </body>
 </html>
-
